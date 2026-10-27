@@ -32,21 +32,26 @@ struct GuessingGameView: View {
     // When one of them changes, the screen updates by itself.
 
     // The number the player is trying to find. The app picks it at random.
-    @State var secretNumber: Int = Int.random(in: lowestNumber...highestNumber)
+    // The lowest and highest numbers the game will pick from.
+        let lowestNumber: Int = 1
+        @State var highestNumber: Int = 100
 
-    // The guess the player is about to make. It starts in the middle.
-    @State var guess: Int = (lowestNumber + highestNumber) / 2
+        // The number the player is trying to find. The app picks it at random.
+        @State var secretNumber: Int = 1
 
-    // How many guesses the player has made in this game.
-    @State var guessCount: Int = 0
+        // The guess the player is about to make. It starts in the middle.
+        @State var guess: Int = 50
 
-    // The message shown to the player, with a symbol and a colour to match it.
-    @State var message: String = "I'm thinking of a number from \(lowestNumber) to \(highestNumber)."
-    @State var messageSymbol: String = "questionmark.circle.fill"
-    @State var messageColor: Color = Color.indigo
+        // How many guesses the player has made in this game.
+        @State var guessCount: Int = 0
 
-    // Becomes true when the player finds the secret number.
-    @State var gameIsOver: Bool = false
+        // The message shown to the player, with a symbol and a colour to match it.
+        @State var message: String = "I'm thinking of a number from 1 to 100."
+        @State var messageSymbol: String = "questionmark.circle.fill"
+        @State var messageColor: Color = Color.indigo
+
+        // Becomes true when the player finds the secret number.
+        @State var gameIsOver: Bool = false
 
     // MARK: - Computed properties
 
@@ -64,7 +69,24 @@ struct GuessingGameView: View {
             // Shrink the title a little if it does not fit on one line.
             .lineLimit(1)
             .minimumScaleFactor(0.5)
-
+            // Difficulty buttons to pick a new range and start a new game.
+                        HStack(spacing: 8) {
+                            Button("Easy") {
+                                highestNumber = 10
+                                startNewGame()
+                            }
+                            Button("Medium") {
+                                highestNumber = 100
+                                startNewGame()
+                            }
+                            Button("Hard") {
+                                highestNumber = 1000
+                                startNewGame()
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .font(.subheadline)
+                        .bold()
             Spacer()
 
             // The message card: what the game has to say to you.
