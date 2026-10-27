@@ -145,21 +145,46 @@ struct GuessingGameView: View {
     // Checks the player's guess against the secret number.
     func checkGuess() {
 
-        // One more guess has been made.
-        guessCount += 1
+            // One more guess has been made.
+            guessCount += 1
 
-        if guess == secretNumber {
-            message = "Yes! \(secretNumber) is my number. Alittle aniclimactic."
-            messageSymbol = "star.circle.fill"
-            messageColor = Color.green
-            gameIsOver = true
-        } else {
-            // TRY: Change this message. Make it kinder, or sillier.
-            message = "\(guess) This appears to not be my number please try again its ok if it takes acouple atempts."
-            messageSymbol = "xmark.circle.fill"
-            messageColor = Color.orange
+            if guess == secretNumber {
+                message = "Yes! \(secretNumber) is my number. Alittle aniclimactic."
+                messageSymbol = "star.circle.fill"
+                messageColor = Color.green
+                gameIsOver = true
+            } else {
+                let difference: Int = guess - secretNumber
+                
+                let absoluteDifference: Int
+                if difference < 0 {
+                    absoluteDifference = -difference
+                } else {
+                    absoluteDifference = difference
+                }
+
+                let proximityMessage: String
+                if absoluteDifference <= 5 {
+                    proximityMessage = "Hot!"
+                    messageSymbol = "flame.fill"
+                    messageColor = Color.red
+                } else if absoluteDifference <= 15 {
+                    proximityMessage = "Warm."
+                    messageSymbol = "sun.max.fill"
+                    messageColor = Color.orange
+                } else {
+                    proximityMessage = "Cold."
+                    messageSymbol = "snowflake"
+                    messageColor = Color.blue
+                }
+
+                if guess < secretNumber {
+                    message = "\(guess) is too low. \(proximityMessage) Please try again!"
+                } else {
+                    message = "\(guess) is too high. \(proximityMessage) Please try again!"
+                }
+            }
         }
-    }
 
     // Makes the guess 10 smaller, but never smaller than the lowest number.
     func lowerGuessByTen() {
